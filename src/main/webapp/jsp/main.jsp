@@ -79,10 +79,10 @@
 							<a class="load-page" id="monitor_menu_item" target="main" href="#" data-url="jsp/monitorManagement.jsp" data-level="2">监控管理</a>
 						</li>
 						<li>
-							<a class="load-page" id="member_menu_item" target="main" href="#" data-url="jsp/memberManagement.jsp" data-level="2">会员管理</a>
+							<a class="load-page" id="member_menu_item" target="main" href="#" data-url="dist/index.html#/member" data-level="2">会员管理</a>
 						</li>
 						<li>
-							<a class="load-page" id="payment_menu_item" target="main" href="#" data-url="jsp/paymentManagement.jsp" data-level="2">缴费管理</a>
+							<a class="load-page" id="payment_menu_item" target="main" href="#" data-url="dist/index.html#/fee" data-level="2">缴费管理</a>
 						</li>
 					</ul>
 				</li>
@@ -91,13 +91,13 @@
 					<a class="parent" id="information_menu" target="main" href="javascript:;" data-level="1" aria-expanded="false">通知管理<span class="glyphicon arrow"></span></a>
 					<ul class="nav nav-second-level collapse in" style="height: 0px;">
 						<li>
-							<a class="load-page" id="school_information_menu_item" target="main" href="#" data-url="jsp/schoolInformationManagement.jsp" data-level="2">学校通知</a>
+							<a class="load-page" id="school_information_menu_item" target="main" href="#" data-url="dist/index.html#/schoolInformation" data-level="2">学校通知</a>
 						</li>
 						<li>
-							<a class="load-page" id="branch_school_information_item" target="main" href="#" data-url="jsp/branchSchoolInformationManagement.jsp" data-level="2">分园通知</a>
+							<a class="load-page" id="branch_school_information_item" target="main" href="#" data-url="dist/index.html#/information" data-level="2">分园通知</a>
 						</li>
 						<li>
-							<a class="load-page" id="group_information_menu_item" target="main" href="#" data-url="jsp/groupInformationManagement.jsp" data-level="2">班级通知</a>
+							<a class="load-page" id="group_information_menu_item" target="main" href="#" data-url="dist/index.html#/information" data-level="2">班级通知</a>
 						</li>
 					</ul>
 				</li>
@@ -106,13 +106,13 @@
 					<a class="parent" id="study_menu" target="main" href="javascript:;" data-level="1" aria-expanded="false">学习管理<span class="glyphicon arrow"></span></a>
 					<ul class="nav nav-second-level collapse in" style="height: 0px;">
 						<li>
-							<a class="load-page" id="subject_menu_item" target="main" href="#" data-url="jsp/subjectManagement.jsp" data-level="2">科目管理</a>
+							<a class="load-page" id="subject_menu_item" target="main" href="#" data-url="dist/index.html#/Subject" data-level="2">科目管理</a>
 						</li>
 						<li>
-							<a class="load-page" id="course_menu_item" target="main" href="#" data-url="jsp/courseManagement.jsp" data-level="2">课程管理</a>
+							<a class="load-page" id="course_menu_item" target="main" href="#" data-url="dist/index.html#/Course" data-level="2">课程管理</a>
 						</li>
 						<li>
-							<a class="load-page" id="courseware_menu_item" target="main" href="#" data-url="jsp/coursewareManagement.jsp" data-level="2">课件管理</a>
+							<a class="load-page" id="courseware_menu_item" target="main" href="#" data-url="dist/index.html#/courseware" data-level="2">课件管理</a>
 						</li>
 					</ul>
 				</li>
