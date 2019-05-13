@@ -7,6 +7,9 @@ const RoleTypeEnum = {
 	PRESIDENT : 1,
 	DIRECTOR : 2,
 	GROUP_LEADER : 3,
+	PRESIDENT_ADMIN : 4,
+	DIRECTOR_ADMIN : 5,
+	GROUP_LEADER_ADMIN : 6,
 };
 
 const RoleTypeDictionary = {
@@ -14,6 +17,9 @@ const RoleTypeDictionary = {
 	1 : "校长",
 	2 : "园长",
 	3 : "老师",
+	4 : "校长管理员",
+	5 : "园长管理员",
+	6: "老师管理员",
 };
 
 const statusTypeDictionary = {

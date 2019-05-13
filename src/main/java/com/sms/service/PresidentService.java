@@ -74,12 +74,39 @@ public class PresidentService extends UserServiceBase implements IPresidentServi
 		
 		user.setLogPassword(hashedPassword);
 		userMapper.insert(user);
-
-		// Create user role in database
-		UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
-		userRoleAssociation.setUserId(user.getId());
-		userRoleAssociation.setRoleId(RoleType.PRESIDENT.getValue());
-		userRoleAssociationMapper.insert(userRoleAssociation);
+        if(null!=userVO.getPerssionlist()&&!userVO.getPerssionlist().isEmpty()) {
+        	// Create user role in database
+        	for(String s:userVO.getPerssionlist()) {
+        		String[]  perssion=s.split(":");
+        		String schoolId=perssion[0];
+        		String  branchSchoolId=perssion[1];
+        		String groupId=perssion[2];
+        		UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+        		userRoleAssociation.setUserId(user.getId());
+        		userRoleAssociation.setRoleId(RoleType.PRESIDENT_ADMIN.getValue());
+        		if(!schoolId.contentEquals("-1")) {
+        			userRoleAssociation.setSchoolId(Integer.parseInt(schoolId));
+        		}
+				if(!branchSchoolId.contentEquals("-1")) {
+					userRoleAssociation.setBranchSchoolId(Integer.parseInt(branchSchoolId));		
+				        		
+				}
+				if(!groupId.contentEquals("-1")) {
+					userRoleAssociation.setGroupId(Integer.parseInt(groupId));
+				}
+        		
+        		userRoleAssociationMapper.insert(userRoleAssociation);
+        	}
+    	
+        }else {
+        	// Create user role in database
+    		UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+    		userRoleAssociation.setUserId(user.getId());
+    		userRoleAssociation.setRoleId(RoleType.PRESIDENT.getValue());
+    		userRoleAssociationMapper.insert(userRoleAssociation);
+        	
+        }
+		
 
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
 	}

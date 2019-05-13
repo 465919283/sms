@@ -154,9 +154,11 @@
 	<foreach collection="schoolIds" item="schoolId" open="(" close=")" separator=",">
       #{schoolId,jdbcType=INTEGER}
 	</foreach>
+	<!-- 
 	and A.role_id = 1 
 	AND A.branch_school_id IS NULL 
-	AND A.group_id IS NULL 
+	AND A.group_id IS NULL
+	 --> 
   </select>
   
   <select id="selectBranchSchoolCountBySchoolIds" resultType="com.sms.model.BranchSchoolCount" >

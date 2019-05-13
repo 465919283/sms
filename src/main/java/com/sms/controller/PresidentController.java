@@ -70,4 +70,22 @@ public class PresidentController extends ControllerBase {
 			return new CommandResult(CommandCode.INTERNAL_ERROR.getCode(), ex.getMessage());
 		}
 	}
+	 //学校管理 用户角色
+	@RequestMapping(value = "/PresidentAdmin", method = RequestMethod.POST)
+	@ResponseBody
+	public CommandResult createPresidentAdmin(HttpServletRequest request, @RequestBody String userJsonString) {
+		try {
+			if (StringUtils.isBlank(userJsonString)) {
+				return new CommandResult(CommandCode.EMPTY_REQUEST_BODY.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.EMPTY_REQUEST_BODY));
+			}
+
+			JSONObject userJsonObject = JSONObject.fromObject(userJsonString.trim());
+			UserVO userVO = new UserVO(userJsonObject);
+			logger.debug("Creating new president '" + userVO.getLogName() + "' ...");
+			return iPresidentService.createPresident(userVO);
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			return new CommandResult(CommandCode.INTERNAL_ERROR.getCode(), ex.getMessage());
+		}
+	}
 }

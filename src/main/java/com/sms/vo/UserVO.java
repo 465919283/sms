@@ -1,5 +1,8 @@
 package com.sms.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.json.JSONObject;
 
 public class UserVO {
@@ -17,9 +20,21 @@ public class UserVO {
 
 	private String telephoneNumber;
 	private Boolean telephoneNumberIsPresented = false;
+	
+	private  List<String> perssionlist=new ArrayList<String>();//角色下面的学校 分院  班级 格式： 学校id:分园id:班级id 如果没有则传空值
+	
+	
 
 	// private Integer roleId;
 	// private Boolean roleIdIsPresented = false;
+
+	public List<String> getPerssionlist() {
+		return perssionlist;
+	}
+
+	public void setPerssionlist(List<String> perssionlist) {
+		this.perssionlist = perssionlist;
+	}
 
 	private Boolean status;
 	private Boolean statusIsPresented = false;

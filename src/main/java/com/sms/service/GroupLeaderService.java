@@ -70,12 +70,20 @@ public class GroupLeaderService extends UserServiceBase implements IGroupLeaderS
 	    	if (result != null) {
 	    	    return result;
 	    	}
-
+	    	BranchSchool branchSchool =null;
 	    	// Get branch school
-        	BranchSchool branchSchool = branchSchoolMapper.selectByPrimaryKey(branchSchoolId);
-        	if (branchSchool == null) {
-        	    return new CommandResult(CommandCode.BRANCH_SCHOOL_NOT_EXIST.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.BRANCH_SCHOOL_NOT_EXIST));
-        	}
+	    	
+	    	if(null==branchSchoolId) { //说明是走的 班级管理员用户设置
+	    		
+	    	}else {
+	    		  branchSchool = branchSchoolMapper.selectByPrimaryKey(branchSchoolId);
+	        	if (branchSchool == null) {
+	        	    return new CommandResult(CommandCode.BRANCH_SCHOOL_NOT_EXIST.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.BRANCH_SCHOOL_NOT_EXIST));
+	        	}
+	    		
+	    	}
+	    	
+        	
         	
 		// Create user in database
 		User user = UserDataHelper.convertUserVOToUser(userVO);
@@ -92,13 +100,32 @@ public class GroupLeaderService extends UserServiceBase implements IGroupLeaderS
 		user.setLogPassword(hashedPassword);
 		userMapper.insert(user);
 
-		// Create user role in database
-		UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
-		userRoleAssociation.setUserId(user.getId());
-		userRoleAssociation.setRoleId(RoleType.GROUOP_LEADER.getValue());
-		userRoleAssociation.setSchoolId(branchSchool.getSchoolId());
-		userRoleAssociation.setBranchSchoolId(branchSchoolId);
-		userRoleAssociationMapper.insert(userRoleAssociation);
+		if(null!=userVO&&null!=userVO.getPerssionlist()&&!userVO.getPerssionlist().isEmpty()) {
+			  for(String s:userVO.getPerssionlist()) {
+				  String[] perssion=s.split(",");
+				  String schoolid=perssion[0];
+				  String branchid=perssion[1];
+				  String classid=perssion[2];
+				  // Create user role in database
+					UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+					userRoleAssociation.setUserId(user.getId());
+					userRoleAssociation.setRoleId(RoleType.GROUOP_LEADER_ADMIN.getValue());
+					userRoleAssociation.setSchoolId(Integer.parseInt(schoolid));
+					userRoleAssociation.setBranchSchoolId(Integer.parseInt(branchid));
+					userRoleAssociation.setGroupId(Integer.parseInt(classid));
+					userRoleAssociationMapper.insert(userRoleAssociation);
+			  }
+		}else {
+			// Create user role in database
+			UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+			userRoleAssociation.setUserId(user.getId());
+			userRoleAssociation.setRoleId(RoleType.GROUOP_LEADER.getValue());
+			userRoleAssociation.setSchoolId(branchSchool.getSchoolId());
+			userRoleAssociation.setBranchSchoolId(branchSchoolId);
+			userRoleAssociationMapper.insert(userRoleAssociation);
+			
+		}
+		
 
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
 	}

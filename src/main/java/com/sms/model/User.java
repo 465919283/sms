@@ -1,6 +1,9 @@
 package com.sms.model;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.sms.vo.RolesVO;
 
 public class User implements Serializable {
     /**
@@ -64,7 +67,19 @@ public class User implements Serializable {
      *
      * @mbggenerated
      */
-    public Integer getId() {
+    
+    public List<RolesVO> roleList;
+    
+    
+    public List<RolesVO> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<RolesVO> roleList) {
+		this.roleList = roleList;
+	}
+
+	public Integer getId() {
         return id;
     }
 

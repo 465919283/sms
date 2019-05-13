@@ -54,6 +54,9 @@ public class LogonService extends ServiceBase implements ILogonService {
 		user.setLogPassword(null);
 		Date lastLogonDate = getLastLogonDate(user.getId());
 		LogonResult logonResult = new LogonResult(user, lastLogonDate, "/jsp/main.jsp");
+		 //该用户下面的角色和菜单
+		
+		user.setRoleList(userMapper.selectRolesByUserId(user.getId()));
 		
 		// Login success, create session key
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK), logonResult);

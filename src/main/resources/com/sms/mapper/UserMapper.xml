@@ -338,4 +338,75 @@
     order by U.id ASC 
   </select>
   
+  
+  
+  
+  <!-- 用户登录后获取菜单权限 -->
+  <resultMap id="BaseResultForRoles" type="com.sms.vo.RolesVO">
+    <id column="roleId" property="roleId" jdbcType="VARCHAR" />
+     <result column="roleName" property="roleName" jdbcType="VARCHAR" />
+     <result column="userId" property="userId" jdbcType="BIGINT" />
+    <collection property="schools" column="{roleId=roleId,userId=userId}" select ="findSchoolsByRoleId"></collection>
+	
+	  </resultMap>
+	 
+	  <!-- 根据userId查询角色   -->
+	  <select id="selectRolesByUserId" resultMap="BaseResultForRoles" parameterType="java.lang.Integer">
+     select  A.name as roleName,A.id as roleId,u.user_id as userId
+    from user_role_association U 
+     inner join role_dictionary A on A.id = U.role_id
+      where u.user_id=#{userId,jdbcType=BIGINT}
+     group by u.user_id
+     
+    </select>
+    <!-- 根据角色查询学校 -->
+    <resultMap id="BaseResultForSchools" type="com.sms.vo.OneLevelVO">
+     <id column="schoolId" property="schoolId" jdbcType="BIGINT" />
+    <result column="schoolName" property="schoolName" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+     <collection   property="branchSchools" column="{schoolId=schoolId,userId=userId}" select ="findBranchSchoolsBySchoolId"  />
+     
+	  </resultMap>
+  
+  <select id="findSchoolsByRoleId" parameterType="java.util.Map" resultMap="BaseResultForSchools">
+       select  A.name as schoolName,U.school_id as schoold,u.user_id as userId
+    from user_role_association U 
+     inner join school A on A.id = U.school_id
+      where u.role_id=#{roleId,jdbcType=BIGINT} and u.user_id=#{userId,jdbcType=BIGINT}
+     group by u.user_id,u.role_id
+        
+  </select> 
+  
+  <!-- 根据学校查询分支机构 -->
+  
+  <resultMap id="BaseResultForBranchSchools" type="com.sms.vo.TwoLevelVO">
+     <id column="branchSchoolId" property="branchSchoolId" jdbcType="BIGINT" />
+    <result column="branchSchoolName" property="branchSchoolName" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+     <collection   property="groupList" column="{branchSchoolId=branchSchoolId,userId=userId}" select ="findGroupsByBranchId"  />
+	  </resultMap>
+	<select id="findBranchSchoolsBySchoolId" parameterType="java.util.Map" resultMap="BaseResultForBranchSchools">
+       select  A.name as branchName,U.branch_school_id as branchSchoolId,u.user_id as userId
+    from user_role_association U 
+     inner join branch_school A on A.id = U.school_id
+      where u.school_id=#{schoolId,jdbcType=BIGINT} and u.user_id=#{userId,jdbcType=BIGINT}
+     group by u.user_id,u.role_id,u.school_id
+        
+  </select> 
+   <!-- 根据分支机构查询班级 -->
+  
+  <resultMap id="BaseResultForGroups" type="com.sms.vo.ThreeLevelVO">
+     <id column="groupId" property="groupId" jdbcType="BIGINT" />
+    <result column="groupName" property="groupName" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+	  </resultMap>
+	<select id="findGroupsByBranchId" parameterType="java.util.Map" resultMap="BaseResultForGroups">
+       select  A.name as groupName,U.group_id as groupId,u.user_id as userId
+    from user_role_association U 
+     inner join sms.group A on A.id =U.group_id
+		 where u.branch_school_id=#{branchSchoolId,jdbcType=BIGINT}  and u.user_id=#{userId,jdbcType=BIGINT}
+     group by u.branch_school_id
+     
+  </select> 
+  
  </mapper>

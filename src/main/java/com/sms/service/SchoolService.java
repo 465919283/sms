@@ -68,6 +68,7 @@ public class SchoolService extends ServiceBase implements ISchoolService {
 			List<JSONObject> jsonObjects = SchoolDataHelper.convertSchoolVOsToJSONObjects(schoolVOs);
 			result.setDataset(jsonObjects);
 		}
+		 
 
 		return result;
 	}

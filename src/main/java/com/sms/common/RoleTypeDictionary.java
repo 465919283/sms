@@ -13,6 +13,9 @@ public class RoleTypeDictionary
 		roleTypeMap.put(RoleType.PRESIDENT, "校长");
 		roleTypeMap.put(RoleType.DIRECTOR, "园长");
 		roleTypeMap.put(RoleType.GROUOP_LEADER, "班主任");
+		roleTypeMap.put(RoleType.PRESIDENT_ADMIN, "学校管理员");
+		roleTypeMap.put(RoleType.DIRECTOR_ADMIN, "园长管理员");
+		roleTypeMap.put(RoleType.GROUOP_LEADER_ADMIN, "班主任管理员");
 	}
 	
 	public static String getRoleTypeName(RoleType roleType)

@@ -71,4 +71,22 @@ public class DirectorController extends ControllerBase {
 			return new CommandResult(CommandCode.INTERNAL_ERROR.getCode(), ex.getMessage());
 		}
 	}
+	//分园管理 用户
+	@RequestMapping(value = "/DirectorAdmin", params = { "SchoolId" }, method = RequestMethod.POST)
+	@ResponseBody
+	public CommandResult createDirectorAdmin(HttpServletRequest request,  @RequestParam("SchoolId")Integer schoolId, @RequestBody String userJsonString) {
+		try {
+			if (StringUtils.isBlank(userJsonString)) {
+				return new CommandResult(CommandCode.EMPTY_REQUEST_BODY.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.EMPTY_REQUEST_BODY));
+			}
+
+			JSONObject userJsonObject = JSONObject.fromObject(userJsonString.trim());
+			UserVO userVO = new UserVO(userJsonObject);
+			logger.debug("Creating new director '" + userVO.getLogName() + "' ...");
+			return iDirectorService.createDirector(null, userVO);
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			return new CommandResult(CommandCode.INTERNAL_ERROR.getCode(), ex.getMessage());
+		}
+	}
 }

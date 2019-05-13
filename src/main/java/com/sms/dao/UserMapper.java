@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.sms.model.User;
+import com.sms.vo.RolesVO;
 
 @Repository
 public interface UserMapper {
@@ -97,4 +98,7 @@ public interface UserMapper {
     public int getGroupLeaderCountByBranchSchoolId(@Param("branchSchoolId")int branchSchoolId);
     
     public List<User> selectGroupLeadersByBranchSchoolId(@Param("branchSchoolId")int branchSchoolId);
+    
+    public List<RolesVO> selectRolesByUserId(@Param("userId") int userId);
+    
 }

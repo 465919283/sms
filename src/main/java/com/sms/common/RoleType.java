@@ -6,7 +6,10 @@ public enum RoleType
 	ADMINISTRATOR(0), 
 	PRESIDENT(1), 
     DIRECTOR(2), 
-    GROUOP_LEADER(3);
+    GROUOP_LEADER(3),
+	PRESIDENT_ADMIN(4), 
+    DIRECTOR_ADMIN(5), 
+    GROUOP_LEADER_ADMIN(6);
 
     private int value;
 

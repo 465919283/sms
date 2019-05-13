@@ -37,9 +37,9 @@
 				<a class="navbar-brand" href="javascript:;"><b>后台管理系统</b></a>
 			</div>
 			<div>
-				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<a href="javascript:;" style="padding-left:0;padding-right:0;" title="">欢迎您：<span style="text-decoration: underline">XYZ</span></a>
+				<ul id="userX" class="nav navbar-nav navbar-right">
+					<li id="userX" id="userX">
+						<a id="userX" href="javascript:;" style="padding-left:0;padding-right:0;" title="">欢迎您：<span id="userX"  style="text-decoration: underline" >XYZ</span></a>
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" title="查看个人操作"> 
@@ -124,10 +124,19 @@
 							<a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">校长管理</a>
 						</li>
 						<li>
+							<a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">学校管理</a>
+						</li>
+						<li>
 							<a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理</a>
 						</li>
 						<li>
+							<a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理用户</a>
+						</li>
+						<li>
 							<a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理</a>
+						</li>
+						<li>
+							<a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理用户</a>
 						</li>
 					</ul>
 				</li>

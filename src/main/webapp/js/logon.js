@@ -46,7 +46,10 @@ function logon()
 	    	{
 	    		localStorage.setItem("user_name", response.data.user.logName);
 	    		localStorage.setItem("user_id", response.data.user.id);
-	    		
+	    		localStorage.setItem("roleList", response.data.user.roleList);
+	    		//var s=window.parent.$("#userX");
+	    		//alert(s);
+	    		//console.info(s);
 	    		// Redirect to main page
 	    		var relativeRedirectUrl = response.data.redirectUrl;
 	    		var absoluteRedirectUrl = window.location.href; 
@@ -60,6 +63,9 @@ function logon()
 	    	}
 	    	else
 	    	{
+	    		//var s=window.parent.$("#userX");
+	    		//alert(JSON.stringify(s));
+	    		//console.info(s);
 	    		bootbox.alert({closeButton: false, size: "small", title: "提示", message: response.message + ' (' + response.code +')'});
 	    	}
 	    },

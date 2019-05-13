@@ -76,12 +76,47 @@ public class DirectorService extends UserServiceBase implements IDirectorService
 		user.setLogPassword(hashedPassword);
 		userMapper.insert(user);
 
-		// Create user role in database
-		UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
-		userRoleAssociation.setUserId(user.getId());
-		userRoleAssociation.setRoleId(RoleType.DIRECTOR.getValue());
-		userRoleAssociation.setSchoolId(schoolId);
-		userRoleAssociationMapper.insert(userRoleAssociation);
+		
+		
+		
+		 //判断是不是分园管理 用户
+		 if(null!=userVO&&null!=userVO.getPerssionlist()&&!userVO.getPerssionlist().isEmpty()) {
+			  for(String s:userVO.getPerssionlist()) {
+				  String[] perssion=s.split(",");
+				  String schoolid=perssion[0];
+				  String branchid=perssion[1];
+				  String classid=perssion[2];
+				  
+				  // Create user role in database
+					UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+					userRoleAssociation.setUserId(user.getId());
+					userRoleAssociation.setRoleId(RoleType.DIRECTOR_ADMIN.getValue());
+					if(!schoolid.contentEquals("-1")) {
+						   userRoleAssociation.setSchoolId(Integer.parseInt(schoolid));
+					}
+					if(!branchid.contentEquals("-1")) {
+						   userRoleAssociation.setBranchSchoolId(Integer.parseInt(branchid));
+					}
+					if(!classid.contentEquals("-1")) {
+						   userRoleAssociation.setGroupId(Integer.parseInt(classid));
+					}
+				
+					userRoleAssociationMapper.insert(userRoleAssociation);
+				  
+			  }
+			 
+		 }else {
+			// Create user role in database
+				UserRoleAssociation userRoleAssociation = new UserRoleAssociation();
+				userRoleAssociation.setUserId(user.getId());
+				userRoleAssociation.setRoleId(RoleType.DIRECTOR.getValue());
+				 if(null!=schoolId) {
+					 userRoleAssociation.setSchoolId(schoolId);
+				 }
+				
+				userRoleAssociationMapper.insert(userRoleAssociation);
+		 }
+		
 
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
 	}
