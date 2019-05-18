@@ -78,13 +78,13 @@
             <value>com.mysql.jdbc.Driver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:mysql://127.0.0.1:3307/sms?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</value>
+            <value>jdbc:mysql://39.96.211.124:3306/sms?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</value>
         </property>
         <property name="username">
             <value>root</value>
         </property>
         <property name="password">
-            <value>123</value>
+            <value>1qaz2wsx</value>
         </property>
         <property name="idleConnectionTestPeriodInMinutes" value="5"/>
         <property name="idleMaxAgeInMinutes" value="20"/>
