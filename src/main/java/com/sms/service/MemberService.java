@@ -2,6 +2,7 @@ package com.sms.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sms.common.CommandCode;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sms.common.DataQueryResult;
 import com.sms.common.helper.MemberDataHelper;
 import com.sms.common.pagination.PaginationData;
+import com.sms.common.pagination.PaginationPageMode;
 import com.sms.vo.MemberVO;
 
 import net.sf.json.JSONObject;
@@ -42,6 +44,7 @@ public class MemberService extends ServiceBase implements IMemberService {
 
 		Integer totalMemberCount = 0;
 		List<Member> members = null;
+		PaginationPageMode s=paginationData.getPageMode();
 		switch (paginationData.getPageMode()) {
 		case NEXT_PAGE:
 		    members = memberMapper.selectByGroupIdAndStartIdAndLimitAndAsc(groupId, paginationData.getQueryId(), paginationData.getCountPerPage());
@@ -143,5 +146,29 @@ public class MemberService extends ServiceBase implements IMemberService {
 		memberMapper.updateByPrimaryKey(updatedMember);
 
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
+	}
+	//导出会员列表
+	public List<MemberVO> getMembersByGroupIdAndPaginationDataExport(User loggedInUser, Integer groupId, PaginationData paginationData) {
+		 List<MemberVO> result = new  ArrayList<MemberVO>(0);
+		List<Member> members = null;
+		switch (paginationData.getPageMode()) {
+		case NEXT_PAGE:
+		    members = memberMapper.selectByGroupIdAndStartIdAndLimitAndAsc(groupId, paginationData.getQueryId(), paginationData.getCountPerPage());
+		    break;
+		case PRE_PAGE:
+		    members = memberMapper.selectByGroupIdAndEndIdAndLimitAndDesc(groupId, paginationData.getQueryId(), paginationData.getCountPerPage());
+		    break;
+		default:
+		    return result;
+		}
+		//totalMemberCount = memberMapper.getCountByGroupId(groupId);
+
+		if (members.size() > 0) {
+			 
+			result = MemberDataHelper.convertMembersToMemberVOs(members);
+			 
+		}
+
+		return result;
 	}
 }

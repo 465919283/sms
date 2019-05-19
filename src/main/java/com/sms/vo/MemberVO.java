@@ -2,23 +2,27 @@ package com.sms.vo;
 
 import java.util.Date;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.metadata.BaseRowModel;
 import com.sms.common.helper.DateTimeHelper;
 
 import net.sf.json.JSONObject;
 
-public class MemberVO {
+public class MemberVO extends BaseRowModel {
 	private Integer id;
 	private Boolean idIsPresented = false;
 	
+	@ExcelProperty(value = "会员帐号",index = 0)  
 	private String logName;
 	private Boolean logNameIsPresented = false;
 
 	private String logPassword;
 	private Boolean logPasswordIsPresented = false;
 
+	@ExcelProperty(value = "联系电话",index = 1)
 	private String telephoneNumber;
 	private Boolean telephoneNumberIsPresented = false;
-	
+	@ExcelProperty(value = "会员名称",index = 2)  
 	private String name;
 	private Boolean nameIsPresented = false;
 	
@@ -36,7 +40,7 @@ public class MemberVO {
 	
 	private String photoUrl;
 	private Boolean photoUrlIsPresented = false;
-	
+	@ExcelProperty(value = "家庭住址",index = 3)  
 	private String homeAddress;
 	private Boolean homeAddressIsPresented = false;
 	

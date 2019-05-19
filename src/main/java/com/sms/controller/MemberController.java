@@ -1,18 +1,33 @@
 package com.sms.controller;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.sms.common.*;
+import com.sms.common.excel.ExcelUtils;
 import com.sms.vo.MemberVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.sms.common.pagination.PaginationData;
+import com.sms.common.pagination.PaginationPageMode;
+import com.sms.common.pagination.PaginationQueryType;
+import com.sms.dao.GroupMapper;
+import com.sms.dao.MemberMapper;
+import com.sms.model.Group;
 import com.sms.model.User;
 import com.sms.service.IMemberService;
 
@@ -23,6 +38,8 @@ import net.sf.json.JSONObject;
 public class MemberController extends ControllerBase {
 	@Autowired
 	private IMemberService iMemberService;
+	@Autowired
+	protected GroupMapper groupMapper;
 
 	public MemberController() {
 		logger = Logger.getLogger(MemberController.class);
@@ -90,4 +107,49 @@ public class MemberController extends ControllerBase {
 			return new CommandResult(CommandCode.INTERNAL_ERROR.getCode(), ex.getMessage());
 		}
 	}
+	
+	   @RequestMapping(value = "/memeberExport/{groupId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	    public void memberExport(HttpServletRequest request, @PathVariable Integer groupId, HttpServletResponse response){
+	        logger.info("会员资源池导出开始");
+	        String fileName="会员列表";
+	        User loggedInUser = getLoggedInUser(request); 
+	        if (groupId == null) {
+				try {
+					throw new Exception("班级id不能为空");
+				} catch (Exception e) {
+					// TODO Auto-generated catchs block
+					e.printStackTrace();
+				}
+			}
+
+			// Check if school exists
+			Group group = groupMapper.selectByPrimaryKey(groupId);
+			if (group != null&&null!=group.getName()) {
+				fileName=group.getName();
+			}
+
+	        PaginationData paginationData=new PaginationData(PaginationQueryType.BY_ID,PaginationPageMode.NEXT_PAGE,Integer.MAX_VALUE);
+	        paginationData.setQueryId(0);
+	        List<MemberVO> list=iMemberService.getMembersByGroupIdAndPaginationDataExport(loggedInUser, groupId, paginationData);
+	        try {
+	        	
+	        	createNewExcel(list,response,fileName);
+	            // 1：创建Excel导出对象；2：设置数据；3：写入输出流；4：临时数据销毁
+	            //ExportExcel ee = new ExportExcel("33", MemberVO.class).setDataList(list).write(response, "memeberExport.xls".toString()).dispose();
+	            logger.info("导出成功，返回的报文");
+	            //return createSuccessJsonResonse(null);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            System.out.println("导出失败！失败信息：" + e.getMessage());
+	            //return createErrorJsonResonse(ServiceConstants.DEFAULT_ACTION_ERRRETURN, "导出失败");
+	        }
+	    }
+	   
+	   
+	   public void createNewExcel(List<MemberVO> storageInfoList,HttpServletResponse response,String fileName) {
+		   String excelName = new Date().toLocaleString();
+		   ExcelUtils.writeExcel(response, storageInfoList, excelName, fileName, new MemberVO());
+		   //ExcelUtil.writeExcel(response,storageInfoList,"导出测试","没有设定sheet名称", ExcelTypeEnum.XLSX,ExportTestModel.class);
+	   
+	   }
 }
