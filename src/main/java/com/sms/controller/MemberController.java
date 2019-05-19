@@ -1,32 +1,27 @@
 package com.sms.controller;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.sms.common.*;
 import com.sms.common.excel.ExcelUtils;
 import com.sms.vo.MemberVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sms.common.pagination.PaginationData;
 import com.sms.common.pagination.PaginationPageMode;
 import com.sms.common.pagination.PaginationQueryType;
 import com.sms.dao.GroupMapper;
-import com.sms.dao.MemberMapper;
 import com.sms.model.Group;
 import com.sms.model.User;
 import com.sms.service.IMemberService;
@@ -108,7 +103,7 @@ public class MemberController extends ControllerBase {
 		}
 	}
 	
-	   @RequestMapping(value = "/memeberExport/{groupId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	   @RequestMapping(value = "/memeberExport/{groupId}",method = RequestMethod.POST,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	    public void memberExport(HttpServletRequest request, @PathVariable Integer groupId, HttpServletResponse response){
 	        logger.info("会员资源池导出开始");
 	        String fileName="会员列表";
@@ -151,5 +146,16 @@ public class MemberController extends ControllerBase {
 		   ExcelUtils.writeExcel(response, storageInfoList, excelName, fileName, new MemberVO());
 		   //ExcelUtil.writeExcel(response,storageInfoList,"导出测试","没有设定sheet名称", ExcelTypeEnum.XLSX,ExportTestModel.class);
 	   
+	   }
+	   @RequestMapping(value = "/memeberImport",consumes = "multipart/form-data",method = RequestMethod.POST)
+	    @ResponseBody
+	    public CommandResult custSourceImport(MultipartFile file,Long userId,String userName,Integer  topCompanyId){
+		   
+		   
+		   CommandResult result=new CommandResult(CommandCode.OK.getCode(),"OK");
+		   
+		   
+		   return result;
+		   
 	   }
 }
