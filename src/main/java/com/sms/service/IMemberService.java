@@ -14,6 +14,7 @@ public interface IMemberService {
 	public DataQueryResult<JSONObject> getMembersByGroupIdAndPaginationData(User loggedInUser, Integer groupId, PaginationData paginationData);
 	public CommandResult getMember(Integer id);
 	public CommandResult createMember(MemberVO memberVO);
+	public CommandResult batchCreateMember(List<MemberVO> memberVOs);
 	public CommandResult updateBranchSchool(Integer id, MemberVO memberVO);
 	public List<MemberVO> getMembersByGroupIdAndPaginationDataExport(User loggedInUser, Integer groupId, PaginationData paginationData);
 }

@@ -171,4 +171,28 @@ public class MemberService extends ServiceBase implements IMemberService {
 
 		return result;
 	}
+	@Override
+	public   CommandResult batchCreateMember(List<MemberVO> memberVOs) {
+		CommandResult result=new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
+		 String errMsg = "";
+		if(null!=memberVOs&&!memberVOs.isEmpty()) {
+			
+			for(int i=0;i<memberVOs.size();i++) {
+				
+				MemberVO vo=memberVOs.get(i);
+				CommandResult voResult=this.createMember(vo);
+				
+				if(voResult.getCode()!=CommandCode.OK.getCode()) {
+					errMsg=errMsg+"第"+(i+1)+"条数据错误信息如下:"+voResult.getMessage()+";";
+					
+				}
+			}
+		}
+		
+		if(errMsg.length()>0) {
+			result=new CommandResult(CommandCode.OK.getCode(), errMsg);
+		}
+		
+		return result;
+	}
 }

@@ -352,11 +352,11 @@
 	 
 	  <!-- 根据userId查询角色   -->
 	  <select id="selectRolesByUserId" resultMap="BaseResultForRoles" parameterType="java.lang.Integer">
-     select  A.name as roleName,A.id as roleId,u.user_id as userId
+     select  A.name as roleName,A.id as roleId,U.user_id as userId
     from user_role_association U 
      inner join role_dictionary A on A.id = U.role_id
-      where u.user_id=#{userId,jdbcType=BIGINT}
-     group by u.user_id
+      where U.user_id=#{userId,jdbcType=BIGINT}
+     group by U.user_id
      
     </select>
     <!-- 根据角色查询学校 -->
@@ -369,11 +369,11 @@
 	  </resultMap>
   
   <select id="findSchoolsByRoleId" parameterType="java.util.Map" resultMap="BaseResultForSchools">
-       select  A.name as schoolName,U.school_id as schoold,u.user_id as userId
+       select  A.name as schoolName,U.school_id as schoold,U.user_id as userId
     from user_role_association U 
      inner join school A on A.id = U.school_id
-      where u.role_id=#{roleId,jdbcType=BIGINT} and u.user_id=#{userId,jdbcType=BIGINT}
-     group by u.user_id,u.role_id
+      where U.role_id=#{roleId,jdbcType=BIGINT} and U.user_id=#{userId,jdbcType=BIGINT}
+     group by U.user_id,U.role_id
         
   </select> 
   
@@ -386,11 +386,11 @@
      <collection   property="groupList" column="{branchSchoolId=branchSchoolId,userId=userId}" select ="findGroupsByBranchId"  />
 	  </resultMap>
 	<select id="findBranchSchoolsBySchoolId" parameterType="java.util.Map" resultMap="BaseResultForBranchSchools">
-       select  A.name as branchName,U.branch_school_id as branchSchoolId,u.user_id as userId
+       select  A.name as branchName,U.branch_school_id as branchSchoolId,U.user_id as userId
     from user_role_association U 
      inner join branch_school A on A.id = U.school_id
-      where u.school_id=#{schoolId,jdbcType=BIGINT} and u.user_id=#{userId,jdbcType=BIGINT}
-     group by u.user_id,u.role_id,u.school_id
+      where U.school_id=#{schoolId,jdbcType=BIGINT} and U.user_id=#{userId,jdbcType=BIGINT}
+     group by U.user_id,U.role_id,U.school_id
         
   </select> 
    <!-- 根据分支机构查询班级 -->
@@ -401,11 +401,11 @@
     <result column="userId" property="userId" jdbcType="BIGINT" />
 	  </resultMap>
 	<select id="findGroupsByBranchId" parameterType="java.util.Map" resultMap="BaseResultForGroups">
-       select  A.name as groupName,U.group_id as groupId,u.user_id as userId
+       select  A.name as groupName,U.group_id as groupId,U.user_id as userId
     from user_role_association U 
      inner join sms.group A on A.id =U.group_id
-		 where u.branch_school_id=#{branchSchoolId,jdbcType=BIGINT}  and u.user_id=#{userId,jdbcType=BIGINT}
-     group by u.branch_school_id
+		 where U.branch_school_id=#{branchSchoolId,jdbcType=BIGINT}  and U.user_id=#{userId,jdbcType=BIGINT}
+     group by U.branch_school_id
      
   </select> 
   

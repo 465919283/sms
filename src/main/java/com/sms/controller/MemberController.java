@@ -1,10 +1,17 @@
 package com.sms.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.sms.common.*;
 import com.sms.common.excel.ExcelUtils;
 import com.sms.vo.MemberVO;
@@ -22,6 +29,7 @@ import com.sms.common.pagination.PaginationData;
 import com.sms.common.pagination.PaginationPageMode;
 import com.sms.common.pagination.PaginationQueryType;
 import com.sms.dao.GroupMapper;
+import com.sms.listener.ExcelListener;
 import com.sms.model.Group;
 import com.sms.model.User;
 import com.sms.service.IMemberService;
@@ -103,7 +111,7 @@ public class MemberController extends ControllerBase {
 		}
 	}
 	
-	   @RequestMapping(value = "/memeberExport/{groupId}",method = RequestMethod.POST,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	   @RequestMapping(value = "/memeberExport/{groupId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	    public void memberExport(HttpServletRequest request, @PathVariable Integer groupId, HttpServletResponse response){
 	        logger.info("会员资源池导出开始");
 	        String fileName="会员列表";
@@ -149,8 +157,28 @@ public class MemberController extends ControllerBase {
 	   }
 	   @RequestMapping(value = "/memeberImport",consumes = "multipart/form-data",method = RequestMethod.POST)
 	    @ResponseBody
-	    public CommandResult custSourceImport(MultipartFile file,Long userId,String userName,Integer  topCompanyId){
+	    public CommandResult memeberImport(MultipartFile file,Long userId){
 		   
+		   InputStream in = null;
+	        try {
+	            in = file.getInputStream();
+	            // 解析每行结果在listener中处理
+	            AnalysisEventListener listener = new ExcelListener(iMemberService);
+	            ExcelReader excelReader = new ExcelReader(in, ExcelTypeEnum.XLSX, null, listener);
+	            //(第几个sheet,表头所在行数,表格对应实体类)
+	            excelReader.read(new Sheet(1, 1, MemberVO.class));
+	            
+	            
+	        } catch(Exception e) {
+	            logger.error("批量导入失败！", e);
+	        } finally {
+	            try {
+	                in.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	 
 		   
 		   CommandResult result=new CommandResult(CommandCode.OK.getCode(),"OK");
 		   

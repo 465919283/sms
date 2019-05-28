@@ -15,7 +15,7 @@ public class MemberVO extends BaseRowModel {
 	@ExcelProperty(value = "会员帐号",index = 0)  
 	private String logName;
 	private Boolean logNameIsPresented = false;
-
+	@ExcelProperty(value = "登录密码",index = 4) 
 	private String logPassword;
 	private Boolean logPasswordIsPresented = false;
 
@@ -28,10 +28,10 @@ public class MemberVO extends BaseRowModel {
 	
 	private String nickName;
 	private Boolean nickNameIsPresented = false;
-	
+	@ExcelProperty(value = "性别",index = 5)
 	private Byte gender;
 	private Boolean genderIsPresented = false;
-	
+	@ExcelProperty(value = "生日",index = 6)
 	private Date birthday;
 	private Boolean birthdayIsPresented = false;
 
