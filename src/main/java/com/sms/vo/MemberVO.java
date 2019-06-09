@@ -55,7 +55,7 @@ public class MemberVO extends BaseRowModel {
 	
 	private String motherTelephoneNumber;
 	private Boolean motherTelephoneNumberIsPresented = false;
-	
+	@ExcelProperty(value = "班级编码",index = 7)
 	private Integer groupId;
 	private Boolean groupIdIsPresented = false;
 	private String groupName;

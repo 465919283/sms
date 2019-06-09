@@ -106,6 +106,10 @@ public class MemberService extends ServiceBase implements IMemberService {
 		if(null == memberVO || StringUtils.isBlank(memberVO.getName())){
 			return new CommandResult(CommandCode.EMPTY_MEMBER_NAME.getCode(),CommandCodeDictionary.getCodeMessage(CommandCode.EMPTY_MEMBER_NAME));
 		}
+		
+		if(null == memberVO || StringUtils.isBlank(memberVO.getTelephoneNumber())){
+			return new CommandResult(CommandCode.EMPTY_MEMBER_TELPHONE.getCode(),CommandCodeDictionary.getCodeMessage(CommandCode.EMPTY_MEMBER_TELPHONE));
+		}
 
 		// Check if member exists
 		Member member = memberMapper.selectByMemberName(memberVO.getName());
@@ -190,7 +194,7 @@ public class MemberService extends ServiceBase implements IMemberService {
 		}
 		
 		if(errMsg.length()>0) {
-			result=new CommandResult(CommandCode.OK.getCode(), errMsg);
+			result=new CommandResult(CommandCode.IMPORT_ERROR.getCode(), errMsg);
 		}
 		
 		return result;

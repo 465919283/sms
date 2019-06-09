@@ -8,11 +8,14 @@ import com.sms.common.helper.FeeDataHelper;
 import com.sms.common.pagination.PaginationData;
 import com.sms.model.*;
 import com.sms.vo.FeeVO;
+import com.sms.vo.MemberVO;
+
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,12 +83,13 @@ public class FeeService extends ServiceBase implements IFeeService {
         }
         return result;
     }
-
+  
     @Override
     public synchronized CommandResult createFee(FeeVO feeVO) {
         if(null == feeVO || StringUtils.isBlank(feeVO.getName())){
             return new CommandResult(CommandCode.EMPTY_FEE_NAME.getCode(),CommandCodeDictionary.getCodeMessage(CommandCode.EMPTY_FEE_NAME));
         }
+        
         Fee fee = FeeDataHelper.convertFeeVOToFee(feeVO);
         feeMapper.insert(fee);
         return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
@@ -158,4 +162,91 @@ public class FeeService extends ServiceBase implements IFeeService {
         feeMapper.deleteByPrimaryKey(id);
         return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
     }
+    //缴费导出
+    @Override
+    public List<FeeVO> getFeesExport(Integer feeTypeId, PaginationData paginationData) {
+    	List<FeeVO> result = new ArrayList<FeeVO>(0);
+
+        if (feeTypeId == null) {
+            return result;
+        }
+
+        //Integer totalFeeCount = 0;
+        List<Fee> fees = null;
+        switch (paginationData.getPageMode()){
+            case PRE_PAGE:
+                fees = feeMapper.selectByFeeTypeIdAndEndIdAndLimitAndDesc(feeTypeId, paginationData.getQueryId(), paginationData.getCountPerPage());
+                break;
+            case NEXT_PAGE:
+                fees = feeMapper.selectByFeeTypeIdAndStartIdAndLimitAndAsc(feeTypeId, paginationData.getQueryId(), paginationData.getCountPerPage());
+                break;
+            default:
+                return result;
+        }
+       // totalFeeCount = feeMapper.getCountByFeeTypeId(feeTypeId);
+
+        if (fees.size() > 0){
+            fees.stream().forEach(fee -> {
+                FeeType feeType = feeTypeMapper.selectByPrimaryKey(fee.getFeeTypeId());
+                if(null != feeType){
+                    fee.setFeeTypeName(feeType.getName());
+                }
+
+                School school = schoolMapper.selectByPrimaryKey(fee.getSchoolId());
+                if (null != school){
+                    fee.setSchoolName(school.getName());
+                }
+
+                BranchSchool branchSchool = branchSchoolMapper.selectByPrimaryKey(fee.getBranchSchoolId());
+                if (null != branchSchool){
+                    fee.setBranchSchoolName(branchSchool.getName());
+                }
+
+                Course course = courseMapper.selectByPrimaryKey(fee.getCourseId());
+                if (null != course){
+                    fee.setCourseName(course.getName());
+                }
+
+                Group group = groupMapper.selectByPrimaryKey(fee.getGroupId());
+                if (null != group){
+                    fee.setGroupName(group.getName());
+                }
+
+                Member member = memberMapper.selectByPrimaryKey(fee.getMemberId());
+                if (null != member){
+                    fee.setMemberName(member.getName());
+                }
+            });
+            //result = ArrayList<FeeVO>(totalFeeCount);
+            result = FeeDataHelper.convertFeesToFeeVOs(fees);
+             
+        }
+        return result;
+    }
+    
+    
+    @Override
+	public   CommandResult batchCreateFee(List<FeeVO> feevos) {
+		CommandResult result=new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK));
+		 String errMsg = "";
+		if(null!=feevos&&!feevos.isEmpty()) {
+			
+			for(int i=0;i<feevos.size();i++) {
+				
+				FeeVO vo=feevos.get(i);
+				CommandResult voResult=this.createFee(vo);
+				
+				if(voResult.getCode()!=CommandCode.OK.getCode()) {
+					errMsg=errMsg+"第"+(i+1)+"条数据错误信息如下:"+voResult.getMessage()+";";
+					
+				}
+			}
+		}
+		
+		if(errMsg.length()>0) {
+			result=new CommandResult(CommandCode.IMPORT_ERROR.getCode(), errMsg);
+		}
+		
+		return result;
+	}
 }

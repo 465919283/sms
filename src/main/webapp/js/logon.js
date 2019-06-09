@@ -46,10 +46,11 @@ function logon()
 	    	{
 	    		localStorage.setItem("user_name", response.data.user.logName);
 	    		localStorage.setItem("user_id", response.data.user.id);
-	    		localStorage.setItem("roleList", response.data.user.roleList);
+	    		var roles=JSON.stringify(response.data.user.roleList); 
+	    		localStorage.setItem("roleList", roles);
 	    		//var s=window.parent.$("#userX");
 	    		//alert(s);
-	    		//console.info(s);
+	    		 console.log(response.data.user.roleList[0]);
 	    		// Redirect to main page
 	    		var relativeRedirectUrl = response.data.redirectUrl;
 	    		var absoluteRedirectUrl = window.location.href; 

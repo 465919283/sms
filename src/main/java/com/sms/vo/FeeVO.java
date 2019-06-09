@@ -4,23 +4,36 @@ import net.sf.json.JSONObject;
 
 import java.math.BigDecimal;
 
-public class FeeVO {
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.metadata.BaseRowModel;
+
+public class FeeVO    extends BaseRowModel{
 
     private Integer id;
+    @ExcelProperty(value = "费用名称",index = 0)
     private String name;
+    @ExcelProperty(value = "费用类型编号",index = 1)
     private Integer feeTypeId;
+    @ExcelProperty(value = "费用类型",index = 2)
     private String feeTypeName;
+    @ExcelProperty(value = "费用价格",index = 3)
+    private BigDecimal price;
     private Integer courseId;
+    @ExcelProperty(value = "课程名称",index = 4)
     private String courseName;
     private Integer schoolId;
+    @ExcelProperty(value = "学校名称",index = 5)
     private String schoolName;
     private Integer branchSchoolId;
+    @ExcelProperty(value = "分园名称",index = 6)
     private String branchSchoolName;
     private Integer groupId;
+    @ExcelProperty(value = "班级名称",index = 7)
     private String groupName;
     private Integer memberId;
+    @ExcelProperty(value = "会员名称",index = 8)
     private String memberName;
-    private BigDecimal price;
+   
     private Integer managementStatusId;
     public FeeVO(){}
     public FeeVO(JSONObject jsonObject){

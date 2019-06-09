@@ -356,7 +356,7 @@
     from user_role_association U 
      inner join role_dictionary A on A.id = U.role_id
       where U.user_id=#{userId,jdbcType=BIGINT}
-     group by U.user_id
+     <!-- 用户登录后获取菜单权限 end group by U.user_id--> 
      
     </select>
     <!-- 根据角色查询学校 -->
@@ -369,7 +369,7 @@
 	  </resultMap>
   
   <select id="findSchoolsByRoleId" parameterType="java.util.Map" resultMap="BaseResultForSchools">
-       select  A.name as schoolName,U.school_id as schoold,U.user_id as userId
+       select  A.name as schoolName,U.school_id as schoolId,U.user_id as userId
     from user_role_association U 
      inner join school A on A.id = U.school_id
       where U.role_id=#{roleId,jdbcType=BIGINT} and U.user_id=#{userId,jdbcType=BIGINT}

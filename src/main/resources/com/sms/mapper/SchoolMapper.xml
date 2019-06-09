@@ -124,6 +124,13 @@
     <include refid="Base_Column_List" />
     from school 
     <![CDATA[ where id > #{pageStartId,jdbcType=BIGINT} ]]>    
+     <if test="schoolIds != null" >
+        and  id IN
+     <foreach collection="schoolIds.split(',')" item="schoolId" open="(" close=")" separator=",">
+      #{schoolId,jdbcType=INTEGER}
+	</foreach>
+     </if>
+	
     order by id ASC limit #{countPerPage,jdbcType=BIGINT}
   </select>
   
@@ -136,14 +143,28 @@
     	<include refid="Base_Column_List" />
     	from school 
     	<![CDATA[ where id < #{pageEndId,jdbcType=BIGINT} ]]>
+    	 <if test="schoolIds != null" >
+	        and  id IN
+	     <foreach collection="schoolIds.split(',')" item="schoolId" open="(" close=")" separator=",">
+	      #{schoolId,jdbcType=INTEGER}
+		</foreach>
+	     </if>
+     
+     
     	order by id DESC limit #{countPerPage,jdbcType=BIGINT}
     ) U 
     order by U.id ASC
   </select>
   
-  <select id="getTotalSchoolCount" resultType="java.lang.Integer" >
+  <select id="getTotalSchoolCount" resultType="java.lang.Integer" parameterType="map">
     select count(1) 
     from school 
+     <if test="schoolIds != null" >
+	        where  id IN
+	     <foreach collection="schoolIds.split(',')" item="schoolId" open="(" close=")" separator=",">
+	      #{schoolId,jdbcType=INTEGER}
+		</foreach>
+	     </if>
   </select>
   
   <select id="selectSchoolPresidentBySchoolIds" resultType="com.sms.model.SchoolPresident" >

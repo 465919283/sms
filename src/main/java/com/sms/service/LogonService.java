@@ -3,6 +3,7 @@ package com.sms.service;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.sms.common.CommandResult;
 import com.sms.common.helper.SHAHelper;
 import com.sms.model.User;
 import com.sms.vo.LogonResult;
+import com.sms.vo.RolesVO;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -55,9 +57,9 @@ public class LogonService extends ServiceBase implements ILogonService {
 		Date lastLogonDate = getLastLogonDate(user.getId());
 		LogonResult logonResult = new LogonResult(user, lastLogonDate, "/jsp/main.jsp");
 		 //该用户下面的角色和菜单
-		
-		user.setRoleList(userMapper.selectRolesByUserId(user.getId()));
-		
+		List<RolesVO> roles=userMapper.selectRolesByUserId(user.getId());
+		logonResult.getUser().setRoleList(roles);
+		sessionManager.insertRoles(String.valueOf(user.getId()), roles);
 		// Login success, create session key
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK), logonResult);
 	}
@@ -65,6 +67,7 @@ public class LogonService extends ServiceBase implements ILogonService {
 	@Override
 	public CommandResult logout(Integer userId) {
 		sessionManager.removeSession(userId);
+		sessionManager.removeRoles(String.valueOf(userId));
 		return new CommandResult(CommandCode.OK.getCode(), CommandCodeDictionary.getCodeMessage(CommandCode.OK), "/");
 	}
 	

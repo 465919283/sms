@@ -20,6 +20,7 @@ import com.sms.model.School;
 import com.sms.model.SchoolPresident;
 import com.sms.model.User;
 import com.sms.model.UserRoleAssociation;
+import com.sms.vo.RolesVO;
 import com.sms.vo.SchoolVO;
 
 import net.sf.json.JSONObject;
@@ -29,20 +30,55 @@ import net.sf.json.JSONObject;
 public class SchoolService extends ServiceBase implements ISchoolService {
 	public DataQueryResult<JSONObject> getSchoolsByPaginationData(User loggedInUser, PaginationData paginationData) {
 		DataQueryResult<JSONObject> result = new DataQueryResult<JSONObject>(0);
-
+		List<RolesVO> roles= this.sessionManager.getRolesByUserId(String.valueOf(loggedInUser.getId()));
+          String schoolStr="-1";
+          boolean isAdministor=false; //如果是超级管理员 则不需要过滤学校id
+           if(null!=roles&&roles.size()>0) {
+        	   for(int i=0;i<roles.size();i++) {
+        		   RolesVO vo=roles.get(i);
+        		   if(Integer.parseInt(vo.getRoleId())==RoleType.ADMINISTRATOR.getValue()) {
+        			   isAdministor=true;
+        			    break;
+        			   
+        		   }
+        		   
+        		   if(Integer.parseInt(vo.getRoleId())==RoleType.PRESIDENT.getValue()
+        				   ||Integer.parseInt(vo.getRoleId())==RoleType.PRESIDENT_ADMIN.getValue()) {
+        			   
+        			   schoolStr=schoolStr+","+vo.getRoleId();
+        			   
+        		   }
+        	   }
+        	   
+           }
 		Integer totalSchoolCount = 0;
 		List<School> schools = null;
 		switch (paginationData.getPageMode()) {
 		case NEXT_PAGE:
-		    schools = schoolMapper.selectByPageStartIdAndLimitAndAsc(paginationData.getQueryId(), paginationData.getCountPerPage());
+			 if(isAdministor) {
+				  schools = schoolMapper.selectByPageStartIdAndLimitAndAsc(paginationData.getQueryId(), paginationData.getCountPerPage(),null);
+			 }else {
+				  schools = schoolMapper.selectByPageStartIdAndLimitAndAsc(paginationData.getQueryId(), paginationData.getCountPerPage(),schoolStr);
+			 }
+		  
 		    break;
 		case PRE_PAGE:
-		    schools = schoolMapper.selectByPageEndIdAndLimitAndDesc(paginationData.getQueryId(), paginationData.getCountPerPage());
+			if(isAdministor) {
+				  schools = schoolMapper.selectByPageEndIdAndLimitAndDesc(paginationData.getQueryId(), paginationData.getCountPerPage(),null);
+			}else {
+				  schools = schoolMapper.selectByPageEndIdAndLimitAndDesc(paginationData.getQueryId(), paginationData.getCountPerPage(),schoolStr);
+			}
+		  
 		    break;
 		default:
 		    return result;
 		}
-		totalSchoolCount = schoolMapper.getTotalSchoolCount();
+		if(isAdministor) {
+			totalSchoolCount = schoolMapper.getTotalSchoolCount(null);
+		}else {
+			totalSchoolCount = schoolMapper.getTotalSchoolCount(schoolStr);
+		}
+		
 
 		if (schools.size() > 0) {
 			result = new DataQueryResult<JSONObject>(totalSchoolCount);
@@ -52,11 +88,11 @@ public class SchoolService extends ServiceBase implements ISchoolService {
 
 			// Get president name of each school
 			List<SchoolPresident> schoolPresidentList = schoolMapper.selectSchoolPresidentBySchoolIds(schoolIds);
-			Map<Integer, String> schoolPresidentMap = schoolPresidentList.stream().collect(Collectors.toMap(SchoolPresident::getSchoolId, item -> item.getPresidentName()));
+			Map<Integer, String> schoolPresidentMap = schoolPresidentList.stream().collect(Collectors.toMap(SchoolPresident::getSchoolId, item -> item.getPresidentName(),(k,v)->k));
 
 			// Get branch school count of each school
 			List<BranchSchoolCount> branchSchoolCountList = schoolMapper.selectBranchSchoolCountBySchoolIds(schoolIds);
-			Map<Integer, Integer> branchSchoolCountMap = branchSchoolCountList.stream().collect(Collectors.toMap(BranchSchoolCount::getSchoolId, item -> item.getBranchSchoolCount()));
+			Map<Integer, Integer> branchSchoolCountMap = branchSchoolCountList.stream().collect(Collectors.toMap(BranchSchoolCount::getSchoolId, item -> item.getBranchSchoolCount(),(k,v)->k));
 
 			List<SchoolVO> schoolVOs = SchoolDataHelper.convertSchoolsToSchoolVOs(schools);
 

@@ -59,9 +59,9 @@ public interface SchoolMapper {
      */
     int updateByPrimaryKey(School record);
     
-    public List<School> selectByPageStartIdAndLimitAndAsc(@Param("pageStartId")int pageStartId, @Param("countPerPage")int countPerPage);
+    public List<School> selectByPageStartIdAndLimitAndAsc(@Param("pageStartId")int pageStartId, @Param("countPerPage")int countPerPage,@Param("schoolIds")String schoolIds);
     
-    public List<School> selectByPageEndIdAndLimitAndDesc(@Param("pageEndId")int pageEndId, @Param("countPerPage")int countPerPage);
+    public List<School> selectByPageEndIdAndLimitAndDesc(@Param("pageEndId")int pageEndId, @Param("countPerPage")int countPerPage,@Param("schoolIds")String schoolIds);
     
     public List<School> selectBySchoolIds(@Param("schoolIds")List<Integer> schoolIds);
     
@@ -69,7 +69,7 @@ public interface SchoolMapper {
     
     public School selectByName(String name);
     
-    public int getTotalSchoolCount();
+    public int getTotalSchoolCount(@Param("schoolIds")String schoolIds);
     
     public List<BranchSchoolCount> selectBranchSchoolCountBySchoolIds(@Param("schoolIds")List<Integer> schoolIds);
     

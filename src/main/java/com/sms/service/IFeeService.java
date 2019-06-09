@@ -1,10 +1,12 @@
 package com.sms.service;
 
+import java.util.List;
+
 import com.sms.common.CommandResult;
 import com.sms.common.DataQueryResult;
 import com.sms.common.pagination.PaginationData;
-import com.sms.model.Fee;
 import com.sms.vo.FeeVO;
+
 import net.sf.json.JSONObject;
 
 public interface IFeeService {
@@ -13,4 +15,6 @@ public interface IFeeService {
     CommandResult updateFee(Integer id, FeeVO fee);
     CommandResult getFee(Integer id);
     CommandResult deleteFee(Integer id);
+    List<FeeVO> getFeesExport(Integer feeTypeId, PaginationData paginationData);
+     CommandResult batchCreateFee(List<FeeVO> feevos);
 }

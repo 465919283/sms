@@ -43,6 +43,7 @@ const OperationType = {
 function clearLocalStorageData() {
 	localStorage.removeItem("user_name");
 	localStorage.removeItem("user_id");
+	localStorage.removeItem("roleList");
 };
 
 function showDialog(response) {

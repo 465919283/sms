@@ -56,6 +56,7 @@ public class CommandCodeDictionary
 		commandCodeMap.put(CommandCode.EMPTY_MEMBER_NAME, "会员名称不能为空。");
 		commandCodeMap.put(CommandCode.MEMBER_WITH_SAME_NAME_ALREADY_EXISTS,"该会员已存在。");
 		commandCodeMap.put(CommandCode.MEMBER_NOT_EXIST, "该会员不存在。");
+		commandCodeMap.put(CommandCode.EMPTY_MEMBER_TELPHONE, "会员联系手机不能为空。"); 
 
 		commandCodeMap.put(CommandCode.EMPTY_FEE_NAME,"资费名称不能为空。");
 		commandCodeMap.put(CommandCode.FEE_NOT_EXIST,"该资费不存在。");

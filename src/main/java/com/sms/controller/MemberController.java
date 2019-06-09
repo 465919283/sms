@@ -160,15 +160,13 @@ public class MemberController extends ControllerBase {
 	    public CommandResult memeberImport(MultipartFile file,Long userId){
 		   
 		   InputStream in = null;
+		   ExcelListener listener = new ExcelListener(iMemberService);
 	        try {
 	            in = file.getInputStream();
-	            // 解析每行结果在listener中处理
-	            AnalysisEventListener listener = new ExcelListener(iMemberService);
+	            // 解析每行结果在listener中处理  98888888888888 
 	            ExcelReader excelReader = new ExcelReader(in, ExcelTypeEnum.XLSX, null, listener);
 	            //(第几个sheet,表头所在行数,表格对应实体类)
 	            excelReader.read(new Sheet(1, 1, MemberVO.class));
-	            
-	            
 	        } catch(Exception e) {
 	            logger.error("批量导入失败！", e);
 	        } finally {
@@ -179,8 +177,12 @@ public class MemberController extends ControllerBase {
 	            }
 	        }
 	 
-		   
-		   CommandResult result=new CommandResult(CommandCode.OK.getCode(),"OK");
+	        
+		   CommandResult result=new CommandResult(CommandCode.OK.getCode(),"导入成功");
+	         if(listener.errMsg.trim().length()>0) {
+	        	 result=new CommandResult(CommandCode.IMPORT_ERROR.getCode(),listener.errMsg.trim());
+	        	 
+	         }
 		   
 		   
 		   return result;

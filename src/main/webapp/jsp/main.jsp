@@ -27,6 +27,82 @@
 <%@ include file= "../js/common/global_variables"%>
 <script type="text/javascript" src="<%=basePath%>js/common/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/main.js"></script>
+
+   <script>
+		      var roles=localStorage.getItem("roleList");
+		      var isadministrator='-1';
+		      var  isSchool="-1";
+		      var  isSchoolAdmin="-1";
+		      var  isBranch="-1";
+		      var  isBranchAdmin="-1";
+		      var  isClass="-1";
+		      var  isClassAdmin="-1";
+		      var roleArray = JSON.parse(roles);
+		      for(var j = 0,len = roleArray.length; j < len; j++){
+		    	  var  role=roleArray[j];
+		    	    if(role.roleId==RoleTypeEnum.ADMINISTRATOR){
+		    	    	
+		    	    	isadministrator='1';
+		    	    	//return;
+		    	    }
+		    	    
+		    	    
+		    	   if(role.roleId==RoleTypeEnum.PRESIDENT){
+		    	    	
+		    		    isSchool='1';
+		    		     //  return;
+		    	    }
+		    	   
+		    	   if(role.roleId==RoleTypeEnum.PRESIDENT_ADMIN){
+		    	    	
+		    		   isSchoolAdmin='1';
+		    		      // return;
+		    	    }
+		    	   
+		    	    //分园园长
+		    	   if(role.roleId==RoleTypeEnum.DIRECTOR){
+		    	    	
+		    		   isBranch='1';
+		    		      // return;
+		    	    }
+		    	    
+		   	   //分园园长管理员
+		   	   if(role.roleId==RoleTypeEnum.DIRECTOR_ADMIN){
+		    	    	
+		    		   isBranchAdmin='1';
+		    		     //  return;
+		    	    }
+		    	   
+		    	   //班级管理
+		    	   if(role.roleId==RoleTypeEnum.GROUP_LEADER){
+		    	    	
+		    		   isClass='1';
+		    		      // return;
+		    	    }
+		    	    
+		    	   //班级管理员
+		    	   if(role.roleId==RoleTypeEnum.GROUP_LEADER_ADMIN){
+		    	    	
+		    		   isClassAdmin='1';
+		    		      //return;
+		    	    }
+		    	    		
+		    	    	
+		    	     localStorage.setItem("isadministrator",isadministrator);
+		    	     localStorage.setItem("isSchool",isSchool);
+		    	     localStorage.setItem("isSchoolAdmin",isSchoolAdmin);
+		    	     localStorage.setItem("isBranch",isBranch);
+		    	     localStorage.setItem("isBranchAdmin",isBranchAdmin);
+		    	     localStorage.setItem("isClass",isClass);
+		    	     localStorage.setItem("isClassAdmin",isClassAdmin);
+		    	   // document.write(role.roleName);
+		    	    
+		      }
+					    
+					
+					   </script>
+
+
 </head>
 
 <body>
@@ -37,10 +113,14 @@
 				<a class="navbar-brand" href="javascript:;"><b>后台管理系统</b></a>
 			</div>
 			<div>
-				<ul id="userX" class="nav navbar-nav navbar-right">
-					<li id="userX" id="userX">
-						<a id="userX" href="javascript:;" style="padding-left:0;padding-right:0;" title="">欢迎您：<span id="userX"  style="text-decoration: underline" >XYZ</span></a>
+				<ul   class="nav navbar-nav navbar-right">
+					<li  >
+						<a   href="javascript:;" style="padding-left:0;padding-right:0;" title="">欢迎您：<span id="userX"  style="text-decoration: underline" >XYZ</span></a>
 					</li>
+					<script>
+					 document.getElementById("userX").innerHTML=localStorage.getItem("user_name")||'';
+					
+					</script>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" title="查看个人操作"> 
 							<i class="fa fa-user fa-fw"></i> 
@@ -66,15 +146,29 @@
 				<li class="">
 					<a class="parent" id="school_menu" target="main" href="javascript:;" data-level="1" aria-expanded="false">校务管理<span	class="glyphicon arrow"></span></a>
 					<ul class="nav nav-second-level collapse in" style="height:0px;">
-						<li>
-							<a class="load-page" id="school_menu_item" target="main" href="#" data-url="jsp/schoolManagement.jsp" data-level="2">学校管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="subschool_menu_item" target="main" href="#" data-url="jsp/branchSchoolManagement.jsp" data-level="2">分园管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="group_menu_item" target="main" href="#" data-url="jsp/groupManagement.jsp" data-level="2">班级管理</a>
-						</li>
+					    <script>
+					    if(isadministrator=='1'||isSchool=='1'||isSchoolAdmin=='1'){
+					    	var schoolvar='<li><a class="load-page" id="school_menu_item" target="main" href="#" data-url="jsp/schoolManagement.jsp" data-level="2">学校管理</a></li>';
+					    	
+					    	document.write(schoolvar);
+					    }
+					    if(isadministrator=='1'||isSchool=='1'||isSchoolAdmin=='1'
+					      ||isBranch=='1'||isBranchAdmin=='1'){
+					    	var branchschoolvar='<li><a class="load-page" id="subschool_menu_item" target="main" href="#" data-url="jsp/branchSchoolManagement.jsp" data-level="2">分园管理</a></li>';
+					    	
+					    	document.write(branchschoolvar);
+					    }
+					    
+					    if(isadministrator=='1'||isSchool=='1'||isSchoolAdmin=='1'
+						      ||isBranch=='1'||isBranchAdmin=='1'
+						       ||isClass=='1'||isClassAdmin=='1'){
+						    	var classvar='<li><a class="load-page" id="group_menu_item" target="main" href="#" data-url="jsp/groupManagement.jsp" data-level="2">班级管理</a></li>';
+						    	
+						    	document.write(classvar);
+						    }
+					 
+					   </script>
+						 
 						<li>
 							<a class="load-page" id="monitor_menu_item" target="main" href="#" data-url="jsp/monitorManagement.jsp" data-level="2">监控管理</a>
 						</li>
@@ -120,24 +214,38 @@
 				<li>
 					<a class="parent" id="user_menu" target="main" href="javascript:;" data-level="1">用户管理<span class="glyphicon arrow"></span></a>
 					<ul class="nav nav-second-level collapse in" style="height: 0px;">
-						<li>
-							<a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">校长管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">学校管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理用户</a>
-						</li>
-						<li>
-							<a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理</a>
-						</li>
-						<li>
-							<a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理用户</a>
-						</li>
+					     
+					
+					 <script>
+					    if(isadministrator=='1'||isSchool=='1'){
+					    	var roleschool='<li><a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">校长管理</a></li>';
+					    	var rolescholladmin='<li><a class="load-page" id="president_menu_item" target="main" href="#" data-url="jsp/presidentManagement.jsp" data-level="2">学校管理员</a></li>';
+					    	document.write(roleschool+rolescholladmin);
+					    }
+					     
+					    if(isadministrator=='1'||isBranch=='1'){
+					    	var branchvar='<li><a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理</a></li>';
+					    	document.write(branchvar);
+					    }
+					    if(isadministrator=='1'||isSchoolAdmin=='1'){
+					    	var branchadmin='<li><a class="load-page" id="director_menu_item" target="main" href="#" data-url="jsp/directorManagement.jsp" data-level="2">园长管理用户</a></li>';
+					    	document.write(branchadmin);
+					    }
+					    
+					    if(isadministrator=='1'||isClass=='1'){
+					    	var classvar='<li><a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理</a></li>';
+					    	document.write(classvar);
+					    }
+					    
+					    if(isadministrator=='1'||isBranchAdmin=='1'){
+					    	   var classadminvar='<li><a class="load-page" id="group_leader_menu_item" target="main" href="#" data-url="jsp/groupLeaderManagement.jsp" data-level="2">班主任管理用户</a></li>';
+						    	document.write(classadminvar);
+						    }
+					 
+					   </script>
+					 
+					
+						 
 					</ul>
 				</li>
 			</ul>

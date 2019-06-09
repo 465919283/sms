@@ -3,35 +3,32 @@ package com.sms.listener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.sms.common.CommandCode;
 import com.sms.common.CommandResult;
-import com.sms.service.IMemberService;
-import com.sms.vo.MemberVO;
+import com.sms.service.IFeeService;
+import com.sms.vo.FeeVO;
 
 import net.sf.json.JSONObject;
 
-public class ExcelListener extends AnalysisEventListener {
-	private IMemberService iMemberService;
-	private static Logger logger = Logger.getLogger(ExcelListener.class);
+public class FeeExcelListener extends AnalysisEventListener {
+	private IFeeService iMemberService;
+	private static Logger logger = Logger.getLogger(FeeExcelListener.class);
 	public String errMsg=new String("");
-    public ExcelListener(IMemberService cardIssueVehicleInfoService) {
+    public FeeExcelListener(IFeeService cardIssueVehicleInfoService) {
         super();
         this.iMemberService = cardIssueVehicleInfoService;
     }
     
-    private List<MemberVO> datas = new ArrayList<MemberVO>();
+    private List<FeeVO> datas = new ArrayList<FeeVO>();
     //每解析一行数据就走一遍invoke()方法
     public void invoke(Object object, AnalysisContext context) {
         //转为导入模型类
-    	MemberVO excel = (MemberVO)object;
-    	if(StringUtils.isBlank(excel.getLogPassword())) {
-    		excel.setLogPassword("111111");
-    	}
+    	FeeVO excel = (FeeVO)object;
+    	 
     	
     	//MemberVO vehicleInfo =  new MemberVO();
         try {
@@ -47,7 +44,7 @@ public class ExcelListener extends AnalysisEventListener {
     public void doAfterAllAnalysed(AnalysisContext context) {
         try{
             //入库 此方法性能稍差 等有时间在添加真实批量的方法
-        	CommandResult result=iMemberService.batchCreateMember(datas);
+        	CommandResult result=iMemberService.batchCreateFee(datas);
         	logger.error("导入结果:{}"+JSONObject.fromObject(result));
         	if(result.getCode()==CommandCode.IMPORT_ERROR.getCode()) {
         		errMsg=JSONObject.fromObject(result).toString();

@@ -6,7 +6,7 @@ import java.util.List;
 public class OneLevelVO implements Serializable {
 	
 	public String schoolId;
-	public String shoolName;
+	public String schoolName;
 	public List<TwoLevelVO> branchSchools;
 	public String userId;
 	public String getSchoolId() {
@@ -15,11 +15,11 @@ public class OneLevelVO implements Serializable {
 	public void setSchoolId(String schoolId) {
 		this.schoolId = schoolId;
 	}
-	public String getShoolName() {
-		return shoolName;
+	public String getSchoolName() {
+		return schoolName;
 	}
-	public void setShoolName(String shoolName) {
-		this.shoolName = shoolName;
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 	public List<TwoLevelVO> getBranchSchools() {
 		return branchSchools;
